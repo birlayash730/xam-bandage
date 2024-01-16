@@ -1,10 +1,3 @@
-// const SimpleCard = () => {
-//     return (<>
-
-//     </>);
-// }
-
-// export default SimpleCard;
 import { Category, Product } from '@/app/types';
 import { capitalizeFirstLetter, stringToColor } from '@/app/utils';
 import Link from 'next/link';

@@ -39,13 +39,6 @@ export default function RootLayout({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
-  // useEffect(() => {
-  //   if (typeof localStorage !== "undefined") {
-  //     const token = localStorage.getItem('token');
-
-  //   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [router, pathname]);
   return (
     <html lang="en">
       <body className={poppins.className}>

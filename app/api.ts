@@ -1,4 +1,3 @@
-// api.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Product, User, Cart } from "./types";
 
@@ -45,16 +44,16 @@ export const apiSlice = createApi({
     }),
     getCart: builder.query<Cart, string>({
       query: (id) => `/carts/${id}`,
-      ...{tagTypes: ['Cart'] as any},
+      ...{ tagTypes: ["Cart"] as any },
       providesTags: [{ type: "Cart" as never, id: "GET" }],
     }),
-    getUserCart: builder.query<Cart[], {userId: string}>({
-      query: ({userId}: {userId: string}) => `/carts/user/${userId}`,
+    getUserCart: builder.query<Cart[], { userId: string }>({
+      query: ({ userId }: { userId: string }) => `/carts/user/${userId}`,
       providesTags: [{ type: "Cart" as never, id: "GET" }],
     }),
     addProductToCart: builder.mutation<
       void,
-      { productId: number; quantity: number, cartId: number, userId: number }
+      { productId: number; quantity: number; cartId: number; userId: number }
     >({
       query: ({ productId, quantity, cartId, userId }) => ({
         url: `/carts/${cartId}`,
@@ -62,7 +61,7 @@ export const apiSlice = createApi({
         body: {
           userId,
           date: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
-          products: [{productId, quantity}]
+          products: [{ productId, quantity }],
         },
       }),
       invalidatesTags: [{ type: "Cart" as never, id: "GET" }],

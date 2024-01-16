@@ -2,7 +2,6 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
-// import { Container } from "react-bootstrap";
 import Login from './login';
 import { useLoginUserMutation } from '../api';
 import { useRouter } from 'next/navigation';
