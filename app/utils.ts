@@ -45,6 +45,5 @@ export function parseJwt(token: string) {
           .join("")
       )
     : "";
-
   return jsonPayload ? JSON.parse(jsonPayload) : "";
 }

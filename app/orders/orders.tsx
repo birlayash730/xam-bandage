@@ -10,6 +10,7 @@ import { useLocalStorage } from "../useLocalStorage";
 
 const Orders = () => {
   const [token, setToken] = useLocalStorage('token', '');
+  console.log(parseJwt(token));
   const { data: carts, isLoading, isError, error, refetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   const [subtotal, setSubtotal] = useState<{ [key: number]: number }>({});
   function getFormattedDate(date: Date): string {
@@ -50,17 +51,17 @@ const Orders = () => {
               <CardTitle key="ert" className="pt-4 ps-4 text-grey">Order Date: {getFormattedDate(new Date(cart.date))}</CardTitle>
               <CardTitle key="asd" className="pt-4 ps-4 text-grey">Order Id: {cart.id}</CardTitle>
               <CardTitle key="ghg" className="pt-4 ps-4 text-grey d-flex ">
-                <p className="me-2">Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08)).toFixed(2)}</p>
+                <p className="me-2">Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08))?.toFixed(2)}</p>
                 <ButtonToolbar>
                   <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">
                     <pre>
-                      <strong>Subtotal: ${(subtotal[cart.id]).toFixed(2)}</strong>
+                      <strong>Subtotal: ${(subtotal[cart.id])?.toFixed(2)}</strong>
                     </pre>
                     <pre>
-                      <strong>VAT(8%): ${(subtotal[cart.id] * 0.08).toFixed(2)}</strong>
+                      <strong>VAT(8%): ${(subtotal[cart.id] * 0.08)?.toFixed(2)}</strong>
                     </pre>
                     <pre>
-                      <strong>Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08)).toFixed(2)}</strong>
+                      <strong>Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08))?.toFixed(2)}</strong>
                     </pre>
                   </Tooltip>}>
                     <i className="bi bi-info-circle-fill"></i>
