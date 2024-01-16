@@ -11,7 +11,7 @@ import { useCallback, useState } from 'react';
 import { Product } from '../types';
 
 export default function Page() {
-  const token = typeof 'localStorage' !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  const token = typeof 'process' === 'undefined' ? localStorage.getItem('token') || '' : '';
   const { data: carts, isLoading, isError, error, refetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   const currentCart = carts?.[0];
   const [subtotal, setSubtotal] = useState(0);
@@ -21,7 +21,7 @@ export default function Page() {
       seenIds.push(product.id);
       setSubtotal((prevSubtotal) => prevSubtotal + (product.price * quantity));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {

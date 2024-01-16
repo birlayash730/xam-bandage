@@ -34,15 +34,17 @@ export function pickRandomItems<T>(arr: T[], numItems = 5) {
 
 export function parseJwt(token: string) {
   var base64Url = token.split(".")[1];
-  var base64 = base64Url?.replace(/-/g, "+").replace(/_/g, "/");
-  var jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
+  var base64 = base64Url ? base64Url.replace(/-/g, "+").replace(/_/g, "/") : "";
+  var jsonPayload = base64
+    ? decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      )
+    : "";
 
-  return JSON.parse(jsonPayload);
+  return jsonPayload ? JSON.parse(jsonPayload) : "";
 }
