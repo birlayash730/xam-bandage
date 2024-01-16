@@ -8,7 +8,10 @@ import { Product } from "../types";
 import { parseJwt } from "../utils";
 
 const Orders = () => {
-  const token = typeof 'localStorage' !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  let token = '';
+  if (typeof 'process' === 'undefined') {
+    token = localStorage.getItem('token') || '';
+  }
   const { data: carts, isLoading, isError, error, refetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   const [subtotal, setSubtotal] = useState<{ [key: number]: number }>({});
   console.log(carts);
