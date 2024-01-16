@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarToggle } from "react-bootstrap";
@@ -6,7 +8,10 @@ import { Button, Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarTogg
 const Navigation = () => {
 
   const router = useRouter();
-  const token = typeof "process" === "undefined" && typeof 'localStorage' !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  let token = '';
+  if (typeof 'process' === 'undefined') {
+    token = localStorage.getItem('token') || '';
+  }
   const logout = () => {
     if (typeof 'localStorage' !== 'undefined') {
       localStorage.removeItem("token");
