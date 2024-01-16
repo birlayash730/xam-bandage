@@ -33,7 +33,7 @@ export function pickRandomItems<T>(arr: T[], numItems = 5) {
 }
 
 export function parseJwt(token: string) {
-  var base64Url = token.split(".")[1];
+  var base64Url = token?.split(".")[1];
   var base64 = base64Url ? base64Url.replace(/-/g, "+").replace(/_/g, "/") : "";
   var jsonPayload = base64
     ? decodeURIComponent(
