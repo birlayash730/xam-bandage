@@ -8,6 +8,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { parseJwt } from '@/app/utils';
 import { Product } from '@/app/types';
 import { useLocalStorage } from '@/app/useLocalStorage';
+import Link from 'next/link';
 
 export default function Page() {
   const params = useParams();
@@ -55,7 +56,9 @@ export default function Page() {
           <small className='text-secondary'>Availability : <span className='text-success'>In Stock</span></small>
           <p className='text-secondary'>{product?.description}</p>
           <div className='d-flex flex-row'>
-            <Button href='/checkout-page' variant='primary'>Buy Now</Button>
+            <Link href='/checkout-page/[cartId]' as={`/checkout-page/${carts[0].id}`} >
+              <Button variant='primary'>Buy Now</Button>
+            </Link>
             <Button onClick={() => addToCart(product)} className='mx-4'>
               <i className="bi bi-cart"></i> Add to Cart
             </Button>
