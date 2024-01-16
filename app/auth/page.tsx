@@ -7,14 +7,16 @@ import Login from './login';
 import { useLoginUserMutation } from '../api';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'react-bootstrap';
+import { useLocalStorage } from '../useLocalStorage';
 
 export default function Page() {
     const router = useRouter();
+    const [token, setToken] = useLocalStorage('token', '');
     const [loginUser, { isLoading, isError, error }] = useLoginUserMutation();
     const handleLogin = async (username: string, password: string) => {
         const result = await loginUser({ username, password }).unwrap();
         if (result) {
-            localStorage.setItem('token', result.token);
+            setToken(result.token);
             router.push("/");
         }
     };

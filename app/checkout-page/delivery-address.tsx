@@ -2,8 +2,6 @@ import { Row } from "react-bootstrap";
 import { User } from "../types";
 
 const DeliveryAddress = ({ user }: { user: User }) => {
-  console.log(user);
-
   return (
     <>
       <h3 className='my-4 d-flex justify-content-center'>Checkout</h3>

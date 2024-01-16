@@ -9,9 +9,10 @@ import { parseJwt } from '../utils';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
 import { Product } from '../types';
+import { useLocalStorage } from '../useLocalStorage';
 
 export default function Page() {
-  const token = typeof 'process' === 'undefined' ? localStorage.getItem('token') || '' : '';
+  const [token, setToken] = useLocalStorage('token', '');
   const { data: carts, isLoading, isError, error, refetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   const currentCart = carts?.[0];
   const [subtotal, setSubtotal] = useState(0);
@@ -51,7 +52,7 @@ export default function Page() {
             <ShoppingCartProduct addToSubtotal={addToSubtotal} productDetails={productDetails} key={productDetails.productId} />
           ))}
         </section>
-        <Card className='d-flex flex-column p-4'>
+        <Card style={{ height: 'max-content' }} className='d-flex flex-column p-4'>
           <p>Sub Total ({totalItems}) : <strong>${subtotal}</strong></p>
           <Link href="/checkout-page/[cartId]" as={`/checkout-page/${currentCart.id}`}>
             <Button variant="primary">Proceed to buy</Button>

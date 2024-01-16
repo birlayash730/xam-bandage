@@ -11,14 +11,14 @@ import ShoppingCartProduct from '@/app/shopping-cart/shopping-cart-product';
 import { useCallback, useState } from 'react';
 import { Product } from '@/app/types';
 import { parseJwt } from '@/app/utils';
+import { useLocalStorage } from '@/app/useLocalStorage';
 
 export default function Page() {
-  const token = typeof 'localStorage' !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  const [token, setToken] = useLocalStorage('token', '');
   const { data: user, isLoading: isUserLoading, isError: isUserError, error: userError } = useGetUserQuery(parseJwt(token).sub);
   const { cartId } = useParams();
   const [subtotal, setSubtotal] = useState(0);
   const { data: cart, isLoading, isError, error } = useGetCartQuery(cartId as string);
-  console.log(user);
   const seenIds: number[] = [];
   const addToSubtotal = useCallback((product: Product, quantity: number) => {
     if (!seenIds.includes(product.id)) {

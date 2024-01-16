@@ -1,20 +1,17 @@
 "use client"
 
 import { useCallback, useState } from "react";
-import { Card, CardBody, CardTitle, Container, Spinner } from "react-bootstrap";
+import { Button, ButtonToolbar, Card, CardBody, CardTitle, Container, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { useGetUserCartQuery } from "../api";
 import ShoppingCartProduct from "../shopping-cart/shopping-cart-product";
 import { Product } from "../types";
 import { parseJwt } from "../utils";
+import { useLocalStorage } from "../useLocalStorage";
 
 const Orders = () => {
-  let token = '';
-  if (typeof 'process' === 'undefined') {
-    token = localStorage.getItem('token') || '';
-  }
+  const [token, setToken] = useLocalStorage('token', '');
   const { data: carts, isLoading, isError, error, refetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   const [subtotal, setSubtotal] = useState<{ [key: number]: number }>({});
-  console.log(carts);
   function getFormattedDate(date: Date): string {
     const dateStr =
       date.getDate() < 10 ? '0' + `${date.getDate()}` : date.getDate();
@@ -48,15 +45,32 @@ const Orders = () => {
       <h3 className='my-4'>Previous Orders</h3>
       <div className='d-flex flex-row m-4'>
         <section className='d-flex flex-column me-3'>
-          {carts?.map((cart) => (
-            <Card key={cart.id} className="mb-3">
-              <CardTitle className="pt-4 ps-4 text-grey">Order Date: {getFormattedDate(new Date(cart.date))}</CardTitle>
-              <CardTitle className="pt-4 ps-4 text-grey">Order Id: {cart.id}</CardTitle>
-              <CardTitle className="pt-4 ps-4 text-grey">Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08)).toFixed(2)}</CardTitle>
+          {carts?.map((cart, index) => (
+            <Card key={index + cart.id} className="mb-3">
+              <CardTitle key="ert" className="pt-4 ps-4 text-grey">Order Date: {getFormattedDate(new Date(cart.date))}</CardTitle>
+              <CardTitle key="asd" className="pt-4 ps-4 text-grey">Order Id: {cart.id}</CardTitle>
+              <CardTitle key="ghg" className="pt-4 ps-4 text-grey d-flex ">
+                <p className="me-2">Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08)).toFixed(2)}</p>
+                <ButtonToolbar>
+                  <OverlayTrigger placement="right" overlay={<Tooltip id="tooltip">
+                    <pre>
+                      <strong>Subtotal: ${(subtotal[cart.id]).toFixed(2)}</strong>
+                    </pre>
+                    <pre>
+                      <strong>VAT(8%): ${(subtotal[cart.id] * 0.08).toFixed(2)}</strong>
+                    </pre>
+                    <pre>
+                      <strong>Total Amount: ${(subtotal[cart.id] + (subtotal[cart.id] * 0.08)).toFixed(2)}</strong>
+                    </pre>
+                  </Tooltip>}>
+                    <i className="bi bi-info-circle-fill"></i>
+                  </OverlayTrigger>
+                </ButtonToolbar>
+              </CardTitle>
               <CardBody>
                 {
                   cart.products.map((product) => (
-                    <ShoppingCartProduct cartId={cart.id} addToSubtotal={addToSubtotal} productDetails={product} key={cart.id} />
+                    <ShoppingCartProduct cartId={cart.id} addToSubtotal={addToSubtotal} productDetails={product} key={`${product.productId}${product.quantity}${cart.id}`} />
                   ))
                 }
               </CardBody>

@@ -10,7 +10,6 @@ const ShoppingCartProduct = ({ productDetails, addToSubtotal, descriptionWidth, 
   const { data: product, isLoading, isError, error } = useGetProductQuery(productDetails.productId);
   useEffect(() => {
     if (product && addToSubtotal) {
-      console.log(product, productDetails.quantity);
       addToSubtotal(product, productDetails.quantity, cartId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,13 +1,14 @@
 import { useAddProductToCartMutation, useGetUserCartQuery } from "@/app/api";
 import { Product } from "@/app/types";
+import { useLocalStorage } from "@/app/useLocalStorage";
 import { parseJwt } from "@/app/utils";
 import Link from "next/link";
 import { Button, Row } from "react-bootstrap";
 import { Card, CardImg } from "react-bootstrap";
 
 const ProductDetailCard = ({ product }: { product: Product }) => {
-  const [addProductToCart, {isLoading, isError, isSuccess}] = useAddProductToCartMutation();
-  const token = typeof 'localStorage' !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  const [addProductToCart, { isLoading, isError, isSuccess }] = useAddProductToCartMutation();
+  const [token, setToken] = useLocalStorage('token', '');
   const { data: carts, isLoading: isCartLoading, isError: isCartError, error, refetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   if (!product || !carts) {
     return null;
@@ -23,8 +24,8 @@ const ProductDetailCard = ({ product }: { product: Product }) => {
 
   const addToCart = async (product: Product) => {
     try {
-      await addProductToCart({productId: product.id, quantity: 1, cartId: carts[0].id, userId: parseJwt(token).sub}).unwrap();
-    } catch(err) {
+      await addProductToCart({ productId: product.id, quantity: 1, cartId: carts[0].id, userId: parseJwt(token).sub }).unwrap();
+    } catch (err) {
       console.log("Show Red Toaster: Adding to cart failed!");
     }
   }
@@ -32,9 +33,9 @@ const ProductDetailCard = ({ product }: { product: Product }) => {
   return (<>
     <Card className="mx-auto rounded-2 mb-2 info-card" >
       <Row className="d-flex flex-row justify-content-end">
-        <Button onClick={() => addToCart(product)} className="me-3" variant="white" style={{ width: 50 }}>
+        {isSuccess ? <div className="d-flex justify-content-end px-4 py-2"><i className="bi bi-bag-check-fill text-success"></i></div> : <Button onClick={() => addToCart(product)} className="me-3" variant="white" style={{ width: 50 }}>
           <i className="bi bi-cart-plus-fill p-2"></i>
-        </Button>
+        </Button>}
       </Row>
       <CardImg width="150px" height="150px" variant="top" className="rounded-0 border-0 info-card-img mt-2 p-3" src={product.image} alt={product.title} />
       <div className="card-body">

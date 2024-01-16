@@ -21,7 +21,6 @@ const ProductList = () => {
   if (productsLoading || categoriesLoading) {
     return <div className="d-flex justify-content-center"><Spinner variant="primary" animation="border" /></div>;
   }
-  console.log(products, categories);
   if (productsError || categoriesError) {
     return <div>{`Error: ` + (productsErrorData || categoriesErrorData)}</div>;
   }

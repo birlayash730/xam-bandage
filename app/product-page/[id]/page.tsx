@@ -7,6 +7,7 @@ import { useAddProductToCartMutation, useGetProductQuery, useGetUserCartQuery } 
 import { useParams, useRouter } from 'next/navigation';
 import { parseJwt } from '@/app/utils';
 import { Product } from '@/app/types';
+import { useLocalStorage } from '@/app/useLocalStorage';
 
 export default function Page() {
   const params = useParams();
@@ -14,7 +15,7 @@ export default function Page() {
   const { id } = params;
   const { data: product, isLoading, isError, error, refetch } = useGetProductQuery(Number(id));
   const [addProductToCart, { isLoading: isAddLoading, isError: isAddError, isSuccess: isAddSuccess }] = useAddProductToCartMutation();
-  const token = typeof 'localStorage' !== 'undefined' ? localStorage.getItem('token') || '' : '';
+  const [token, setToken] = useLocalStorage('token', '');
   const { data: carts, isLoading: isCartLoading, isError: isCartError, error: cartsError, refetch: cartRefetch } = useGetUserCartQuery({ userId: parseJwt(token).sub });
   if (!product || !carts) {
     return null;

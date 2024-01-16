@@ -10,7 +10,8 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 import Partners from './components/partners'
 import { useRouter, usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocalStorage } from './useLocalStorage'
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] })
 const metadata: Metadata = {
@@ -26,15 +27,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const router = useRouter();
+  const [token, setToken] = useLocalStorage('token', '');
   const pathname = usePathname();
+  const [prevPathName, setPrevPathName] = useState(pathname);
   useEffect(() => {
-    if (typeof localStorage !== "undefined") {
-      const token = localStorage.getItem('token');
-      if (!token && !allowedRoutes.includes(pathname)) {
-        router.push('/auth');
-      }
+    if (!token && !allowedRoutes.includes(pathname)) {
+      setPrevPathName(pathname);
+      router.push('/auth');
+    } else if (!allowedRoutes.includes(prevPathName)) {
+      router.push(prevPathName);
     }
-  }, [router, pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+  // useEffect(() => {
+  //   if (typeof localStorage !== "undefined") {
+  //     const token = localStorage.getItem('token');
+
+  //   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [router, pathname]);
   return (
     <html lang="en">
       <body className={poppins.className}>
